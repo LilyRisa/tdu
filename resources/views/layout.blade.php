@@ -1,5 +1,9 @@
 <html>
-    @include('layout.head')
+    <head>
+        @include('layout.head')
+        @yield('head')
+    </head>
+    
     <body class="theme-orange">
         @include('layout.loader')
         @include('layout.navbar')

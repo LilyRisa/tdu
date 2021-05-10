@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\chucvu;
+use App\Models\phongban;
 use Illuminate\Session\Middleware\StartSession;
 use Auth;
+use App\Jobs\SendEmail;
 
 class Usercontroller extends Controller
 {
@@ -38,12 +41,34 @@ class Usercontroller extends Controller
     }
 
     public function list(){
-        $user = User::all();
-        return view('account_list',['user'=>$user]);
+        $user = User::with('chucvu')->with('phongban')->get();
+        $chucvu = chucvu::all();
+        return view('account_list',['user'=>$user, 'chucvu'=>$chucvu]);
     }
 
     public function contact(){
         $user = User::all();
         return view('contact',['user'=>$user]);
+    }
+
+    public function GetPhongBan(Request $request){
+        $pb = phongban::where('chucvu_id',$request->input('chucvu_id'))->get();
+        return response()->json(['phongban' => $pb]);
+    }
+
+    public function ActiveUser(Request $request){
+        $user = User::find($request->input('id'));
+        // $user->isActive = 1;
+        $user->	chucvu_id = (int)$request->input('chucvu');
+        $user->	phongban_id = (int)$request->input('phongban');
+        $user->	start_contract = date('Y-m-d H:i:s');
+        $user->save();
+        $user_get = User::where('id',$request->input('id'))->with('phongban')->with('chucvu')->first();
+        SendEmail::dispatch($user_get, $user_get->email, [
+            'title' => 'Tài khoản của bạn đang được kích hoạt vào lúc '.date('Y-m-d'),
+            'body' => 'Tài khoản của bạn được kích hoạt bơi quản trị viên truy cập vào link sau để đăng nhặp lại <a href="'.route('index').'">'.route('index').'</a>',
+            'image' => 'https://raw.githubusercontent.com/lime7/responsive-html-template/master/index/intro__bg.png'
+            ]);
+        return response()->json(['is' => true, 'user'=>$user_get]);
     }
 }

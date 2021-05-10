@@ -1,4 +1,4 @@
-@extends('layout', ['page' => 'chức vụ'])
+@extends('layout', ['page' => 'phòng ban'])
 
 @section('content')
    <div class="container-fluid">
@@ -75,10 +75,20 @@
                                 <tbody>
                                 @foreach($phongban as $item)
                                     <tr>
-                                        <td>{{$item->name}}</td>
-                                        <td><span class="badge badge-light">{{$item->chucvu->name}}</span></td>
+                                        <td class="namecv" data-id="{{$item->id}}" data-cv="{{$item->chucvu_id}}" data-st="0">{{$item->name}}</td>
+                                        <td>
+                                            <select class="show-tick chucvu_change" data-id="{{$item->id}}" data-color="{{$item->chucvu->icon}}">
+                                                @foreach ($chucvu as $cv)
+                                                    @if ($cv->id == $item->chucvu_id)
+                                                        <option value="{{$cv->id}}" selected>{{$cv->name}}</option>
+                                                    @else
+                                                        <option value="{{$cv->id}}">{{$cv->name}}</option>
+                                                    @endif                                                  
+                                                @endforeach
+                                            </select>
+                                            <span class="badge badge-light color_cv" style="background-color: {{$item->chucvu->icon}}">{{$item->chucvu->name}}</span></td>
                                         <td>{{$item->icon}}</td>
-                                        <td><span class="badge badge-success" style="cursor: pointer;">Sửa</span> <span class="badge badge-danger" style="cursor: pointer;">Xóa</span></td>
+                                        <td><span class="badge badge-danger delete" style="cursor: pointer;" data-id="{{$item->id}}">Xóa</span></td>
                                     </tr>
                                 @endforeach
                                  
@@ -121,6 +131,114 @@ $(document).ready(function(){
                 toastr.error('Lỗi');
             }
         })
+    });
+     //delete
+     $('.delete').on('click', function(e){
+        e.stopPropagation();
+        var id = $(this).attr('data-id');
+        var that = this;
+        swal({
+            title: "Bạn có chắc chắn?",
+            text: "Đồng ý sẽ xóa toàn bộ các dữ liệu liên quan",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            console.log(id);
+            if (willDelete) {
+                $.ajax({
+                    url: "{{route('phongban.delete')}}",
+                    type: 'post',
+                    data: {
+                        id: id,
+                        "_token": "{{ csrf_token() }}",
+                    }
+                })
+                .done(res =>{
+                    if(res.is){
+                        swal("Xóa thành công!", {
+                        icon: "success",
+                        });
+                        $(that).closest('tr').remove();
+                        // setTimeout(()=>{location.reload()}, 2000)
+                    }else{
+                        swal("lôi!", {
+                        icon: "warning",
+                        });
+                    }
+                })
+            } else {
+                swal("Không xóa!");
+            }
+        });
+    });
+    //click to edit
+    $('#name_change').on('click', function(e){
+        e.stopPropagation();
+    });
+
+    $('.namecv').on('click', function(e){
+        e.stopPropagation();
+        let st = parseInt($(this).attr('data-st'));
+        st = st+1;
+        $(this).attr('data-st', st);
+        if(st == 1){
+            let val = $(this).text();
+            $(this).text('');
+            $(this).append(`<input type="text" class="form-control edittext" id="name_change" value="${val}">`);
+        }
+    });
+    $('.chucvu_change').on('change', function(){
+        $.ajax({
+            url: "{{route('phongban.edit')}}",
+            type: 'post',
+            data: {
+                chucvu: $(this).val(),
+                id: $(this).data('id'),
+                "_token": "{{ csrf_token() }}",
+            }
+        })
+        .done(res =>{
+            if(res.is){
+                toastr.success('sửa thành công');
+                console.log($(this).data('color'));
+                $.post("{{route('phongban.getcolor')}}", { id: $(this).val(), _token : "{{ csrf_token() }}" }).done((e) =>{
+                    console.log(e);
+                    $(this).closest('td').children('.color_cv').attr('style',`background-color: ${e.return.icon}`);
+                    $(this).closest('td').children('.color_cv').text($(this).find('option:selected').text());
+                })
+                
+            }else{
+                toastr.error('Lỗi');
+            }
+        })
+    });
+    $(window).click(function() {
+        let val = $('#name_change').val();
+        $('.namecv').each(function(i, obj) {
+            if($(obj).children('input').length != 0){
+                $(obj).html(val);
+                $(obj).attr('data-st', 0);
+                $.ajax({
+                    url: "{{route('phongban.edit')}}",
+                    type: 'post',
+                    data: {
+                        name: $(obj).text(),
+                        chucvu: $(obj).data('cv'),
+                        id: $(obj).attr('data-id'),
+                        "_token": "{{ csrf_token() }}",
+                    }
+                })
+                .done(res =>{
+                    if(res.is){
+                        toastr.success('sửa thành công');
+                    }else{
+                        toastr.error('Lỗi');
+                    }
+                })
+            }
+        });
     });
 })
 </script>

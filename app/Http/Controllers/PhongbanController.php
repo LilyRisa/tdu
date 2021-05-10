@@ -21,4 +21,27 @@ class PhongbanController extends Controller
         $pb->save();
         return response()->json(['is' => true]);
     }
+
+    public function edit(Request $request){
+        $pb = phongban::find($request->input('id'));
+        if($request->input('name') != null){
+            $pb->name = $request->input('name');
+        }
+        if($request->input('chucvu') != null){
+            $pb->chucvu_id = $request->input('chucvu');
+        }
+        $pb->save();
+        return response()->json(['is' => true]);
+    }
+
+    public function delete(Request $request){
+        $pb = phongban::find($request->input('id'));
+        $pb->delete();
+        return response()->json(['is' => true]);
+    }
+
+    public function GetColor(Request $request){
+        $cv = chucvu::find($request->input('id'));
+        return response()->json(['return' => $cv]);
+    }
 }
