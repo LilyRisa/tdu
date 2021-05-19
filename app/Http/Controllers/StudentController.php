@@ -16,8 +16,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
-        return view('exam.student_create');
+        $ex = Examinfo::with('User')->get();
+        return view('exam.student_create',['exam' => $ex]);
     }
 
     /**
