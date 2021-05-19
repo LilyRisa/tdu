@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLsSalaryOthersTable extends Migration
+class AddColumNumberToPhucapsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateLsSalaryOthersTable extends Migration
      */
     public function up()
     {
-        Schema::create('ls_salary_others', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->integer('salary');
-            $table->boolean('salary_type');
-            $table->timestamps();
+        Schema::table('phucaps', function (Blueprint $table) {
+            $table->date('time_start')->nullable();
+            $table->date('time_end')->nullable();
+            $table->boolean('precent_salary')->nullable();
         });
     }
 
@@ -29,6 +27,8 @@ class CreateLsSalaryOthersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ls_salary_others');
+        Schema::table('phucaps', function (Blueprint $table) {
+            //
+        });
     }
 }

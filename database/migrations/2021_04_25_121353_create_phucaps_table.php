@@ -20,7 +20,6 @@ class CreatePhucapsTable extends Migration
             $table->foreign('chucvu_id')->references('id')->on('chucvus')->onDelete('cascade');
             $table->foreign('phongban_id')->references('id')->on('phongbans')->onDelete('cascade');
             $table->integer('salary');
-            $table->date('longtime');
             $table->timestamps();
         });
     }

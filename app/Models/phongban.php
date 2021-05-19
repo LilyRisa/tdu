@@ -13,4 +13,9 @@ class phongban extends Model
     {
         return $this->belongsTo(chucvu::class, 'chucvu_id');
     }
+
+    public function phucap()
+    {
+        return $this->hasOne(phucap::class);
+    }
 }

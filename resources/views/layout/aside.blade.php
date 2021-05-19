@@ -2,9 +2,9 @@
 <aside id="leftsidebar" class="sidebar">
     <!-- User Info -->
     <div class="user-info">
-        <div class="image">
+        {{-- <div class="image">
             <img src="{{asset('storage')}}/{{ Session::get('avatar')}}" width="48" height="48" alt="User" />
-        </div>
+        </div> --}}
         <div class="info-container">
             <div class="name" data-toggle="dropdown">{{ Session::get('fullname')}}</div>
             <div class="btn-group user-helper-dropdown">
@@ -38,9 +38,9 @@
                 <ul class="ml-menu">
                     <li><a href="{{route('chucvu.list')}}">Quản lý chức vụ</a></li>
                     <li><a href="{{route('phongban.list')}}">Quản lý phòng ban</a></li>
-                    <li><a href="blog-dashboard.html">Quản lý phụ cấp thân nhân</a></li>
-                    <li><a href="blog-dashboard.html">Quản lý phụ cấp khác</a></li>
-                    <li><a href="blog-dashboard.html">Quản lý lương</a></li>
+                    <li><a href="{{route('phucap.list')}}">Quản lý phụ cấp thân nhân</a></li>
+                    <li><a href="{{route('phucapother.list')}}">Quản lý phụ cấp khác</a></li>
+                    <li><a href="{{route('salaries.list')}}">Quản lý lương</a></li>
                 </ul>
             </li>
             @endif
@@ -48,6 +48,7 @@
                 <ul class="ml-menu">
                     @if(Session::get('level') == 1)
                         <li><a href="{{route('account.list')}}">Báo cáo lương toàn thể nhân viên</a></li>
+                        <li><a href="{{route('salaryreport.index')}}">Tính lương cho nhân viên</a></li>
                     @endif
                     <li><a href="index2.html">báo cáo lương</a></li>
                     <li><a href="{{route('contact')}}">Danh sách nhân viên</a></li>
@@ -57,6 +58,82 @@
 
 
 
+                </ul>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- Right Sidebar -->
+<aside id="rightsidebar" class="right-sidebar">
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#skins">Skins</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#settings">Setting</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane in active in active slideRight" id="skins">
+            <div class="slim_scroll">
+                <h6>Flat Color</h6>
+                <ul class="choose-skin">                   
+                    <li data-theme="purple"><div class="purple"></div><span>Purple</span></li>
+                    <li data-theme="blue"><div class="blue"></div><span>Blue</span></li>
+                    <li data-theme="cyan"><div class="cyan"></div><span>Cyan</span></li>
+                </ul>                    
+                <h6>Multi Color</h6>
+                <ul class="choose-skin">                        
+                    <li data-theme="black"><div class="black"></div><span>Black</span></li>
+                    <li data-theme="deep-purple"><div class="deep-purple"></div><span>Deep Purple</span></li>
+                    <li data-theme="red"><div class="red"></div><span>Red</span></li>
+                </ul>                    
+                <h6>Gradient Color</h6>
+                <ul class="choose-skin">
+                    <li data-theme="green"><div class="green"></div><span>Green</span> </li>
+                    <li data-theme="orange" class="active"><div class="orange"></div><span>Orange</span></li>
+                    <li data-theme="blush"><div class="blush"></div><span>Blush</span></li>
+                </ul>
+            </div>                
+        </div>
+        
+        <div role="tabpanel" class="tab-pane slideLeft" id="settings">
+            <div class="settings slim_scroll">
+                <p class="text-left">General Settings</p>
+                <ul class="setting-list">
+                    <li><span>Report Panel Usage</span>
+                        <div class="switch">
+                            <label><input type="checkbox" checked><span class="lever"></span></label>
+                        </div>
+                    </li>
+                    <li><span>Email Redirect</span>
+                        <div class="switch">
+                            <label><input type="checkbox"><span class="lever"></span></label>
+                        </div>
+                    </li>
+                </ul>
+                <p class="text-left">System Settings</p>
+                <ul class="setting-list">
+                    <li><span>Notifications</span>
+                        <div class="switch">
+                            <label><input type="checkbox" checked><span class="lever"></span></label>
+                        </div>
+                    </li>
+                    <li><span>Auto Updates</span>
+                        <div class="switch">
+                            <label><input type="checkbox" checked><span class="lever"></span></label>
+                        </div>
+                    </li>
+                </ul>
+                <p class="text-left">Account Settings</p>
+                <ul class="setting-list">
+                    <li><span>Offline</span>
+                        <div class="switch">
+                            <label><input type="checkbox"><span class="lever"></span></label>
+                        </div>
+                    </li>
+                    <li><span>Location Permission</span>
+                        <div class="switch">
+                            <label><input type="checkbox" checked><span class="lever"></span></label>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

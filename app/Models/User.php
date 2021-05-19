@@ -57,4 +57,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(phongban::class, 'phongban_id');
     }
+    public function salary()
+    {
+        return $this->hasOne(salary::class);
+    }
+    public function salary_cal()
+    {
+        return $this->hasOne(salary::class);
+    }
 }

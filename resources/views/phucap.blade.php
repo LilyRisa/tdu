@@ -1,4 +1,4 @@
-@extends('layout', ['page' => 'chức vụ'])
+@extends('layout', ['page' => 'Phụ cấp thân nhân'])
 @section('head')
 <style>
     .edittext, .edittext:focus{
@@ -15,10 +15,10 @@
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="header">
-                        <h2> Danh sách chức vụ </h2>
+                        <h2> Bảng phụ cấp thân nhân </h2>
                         <div class="clearfix">
                             <div class="col-sm-3">
-                                <button class="btn btn-primary" id="add_cv" data-toggle="modal" data-target="#exampleModal">Thêm chức vụ</button>
+                                <button class="btn btn-primary open-AddBookDialog" id="add_cv" data-toggle="modal" data-target="#exampleModal">Thêm bản ghi</button>
                             </div>
                         </div>
                         <!-- Modal -->
@@ -26,7 +26,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Thêm chức vụ</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Thêm bản ghi</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -35,14 +35,32 @@
                                     <form>
                                         <div class="form-group">
                                         <div class="form-line">
-                                            <label>Tên chức vụ</label>
-                                            <input type="text" class="form-control date" id="cv" value="">
+                                            <label>Chọn chức vụ: </label>
+                                            <select id="chucvu_id" class="show-tick" style="margin-left: 10px">
+                                                @foreach ($chucvu as $cvv)
+                                                    <option value="{{$cvv->id}}">{{$cvv->name}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-line">
-                                            <label>Màu</label>
-                                            <input type="color" class="form-control date" id="color" value="#FFFFFF">
+                                            <label>Chọn phòng ban: </label>
+                                            <select id="phongban_id" class="show-tick" style="margin-left: 10px">
+                                               
+                                            </select>
                                         </div>
-                                        
+                                        <div class="form-line">
+                                            <label>Mức lương phụ cấp</label>
+                                            <select id="type_salary" class="show-tick">
+                                                <option value="percent">Phần trăm (%-Lương cứng)</option>
+                                                <option value="number" selected>Mức cố định</option>
+                                            </select>
+                                            <input type="number" min="0.1"class="form-control date" id="salaries" value="" style="display: inline; width: 70%">
+                                            <span id="type_curren">VND</span>
+                                        </div>
+                                        <div class="form-line">
+                                            <label>Khoảng thời gian</label>
+                                            <input type="text" name="daterange" id="date_range" class="form-control"/>
+                                        </div>
                                         </div>
                                     </form>
                                 </div>
@@ -70,17 +88,36 @@
                             <table class="table table-bordered table-striped table-hover js-exportable dataTable">
                                 <thead>
                                     <tr>
-                                        <th>Tên chức vụ</th>
-                                        <th>Màu</th>
+                                        <th>Chức vụ</th>
+                                        <th>Phòng ban</th>
+                                        <th>Mức phụ cấp lương <span style="color: red">*</span></th>
+                                        <th>Loại phụ cấp</th>  
+                                        <th>Khoảng thời gian</th>
+                                                                             
                                         <th width="20%">Operation</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($chucvu as $item)
+                                @foreach($phucap as $item)
                                     <tr>
-                                        <td class="namecv" data-id="{{$item->id}}" data-st="0">{{$item->name}}</td>
-                                        <td><input type="color" class="form-control color_picker" value="{{$item->icon == null ? '#FFFFFF' : $item->icon}}" data-id="{{$item->id}}"></td>
-                                        <td><span class="badge badge-danger delete" style="cursor: pointer" data-id="{{$item->id}}">Xóa</span></td>
+                                        {{-- <td class="namecv" data-id="{{$item->id}}" data-st="0">{{$item->id}}</td> --}}
+                                        <td data-id="{{$item->id}}" data-st="0">
+                                            {{$item->chucvu->name}}
+                                        </td>
+                                        <td data-id="{{$item->id}}" data-st="0">
+                                            {{$item->phongban->name}}
+                                        </td>
+                                        @if($item->precent_salary) 
+                                            <td>{{$item->salary}}%</td> 
+                                        @else   
+                                            <td class="currency">{{$item->salary}}</td> 
+                                        @endif
+                                        <td>{{$item->precent_salary ? '% (lương cứng)' : 'cộng trực tiếp'}}</td>
+                                        <td>{{$item->time_start}} to {{$item->time_end}}</td>
+                                        
+                                        <td>
+                                            <span title="Việc xóa lương nhân viên sẽ ảnh hưởng đến phần tính lương cho nhân viên" class="badge badge-danger delete" style="cursor: pointer" data-id="{{$item->id}}">Xóa</span>
+                                        </td>
 
                                     </tr>
                                 @endforeach
@@ -106,6 +143,55 @@
 <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script>
 <script>
 $(document).ready(function(){
+    //date ranger
+    $('input[name="daterange"]').daterangepicker();
+    //select type salary
+    $('#type_salary').on('change', function(){
+        if($(this).val() == 'percent'){
+            $('#type_curren').text('%');
+            $('#salaries').attr('max',100);
+        }else{
+            $('#type_curren').text('VND');
+            $('#salaries').attr('max','');
+        }
+    });
+
+    $('#chucvu_id').on('change', function(){
+        getPhongban($(this).val());
+    });
+
+    function getPhongban(id){
+        $.ajax({
+            url: "{{route('account.getpb')}}",
+            type: 'post',
+            data: {
+                chucvu_id: id,
+                "_token": "{{ csrf_token() }}",
+            }
+        })
+        .done(res =>{
+            let pb = res.phongban;
+            $('#phongban_id').html('');
+            $.each(pb, function (i, item) {
+                // console.log(item);
+                $('#phongban_id').append(`<option value="${item.id}">${item.name}</option>`)
+            });
+            let newitemnum = Math.floor(Math.random() * pb.length) + 1;
+            $("#phongban_id").val(newitemnum);
+            $('#phongban_id').selectpicker("refresh");
+        })
+    }
+    $(document).on("click", ".open-AddBookDialog", function () {
+        getPhongban($('#chucvu_id option:selected').val());
+
+    });
+    // currency format
+    $('.currency').each(function(i, obj) {
+        let val = parseInt($(obj).text());
+        val = val.toLocaleString('it-IT', {style : 'currency',currency : 'VND'});
+        $(obj).text(val);
+    });
+ 
     //delete
     $('.delete').on('click', function(e){
         e.stopPropagation();
@@ -113,8 +199,8 @@ $(document).ready(function(){
         var that = this;
         swal({
             title: "Bạn có chắc chắn?",
-            text: "Đồng ý sẽ xóa toàn bộ các dữ liệu liên quan",
-            icon: "warning",
+            text: "Việc xóa lương nhân viên sẽ ảnh hưởng đến phần tính lương cho nhân viên",
+            icon: "error",
             buttons: true,
             dangerMode: true,
         })
@@ -122,7 +208,7 @@ $(document).ready(function(){
             console.log(id);
             if (willDelete) {
                 $.ajax({
-                    url: "{{route('chucvu.delete')}}",
+                    url: "{{route('phucap.delete')}}",
                     type: 'post',
                     data: {
                         id: id,
@@ -208,12 +294,21 @@ $(document).ready(function(){
     });
 
     $('#submit_cv').on('click', function(){
+        let data = {
+            chucvu_id: $('#chucvu_id').val(),
+            phongban_id: $('#phongban_id').val(),
+        }
+        let salary = $('#type_salary').val() == 'percent' ? {percent: true, salary: $('#salaries').val()} : {percent: false, salary: $('#salaries').val()};
+        let date = $('#date_range').val();
+        date = date.split(' - ');
+        date = {time_start: date[0], time_end: date[1]};
+        data = {...data, ...salary, ...date};
+        console.log(data);
         $.ajax({
-            url: "{{route('chucvu.add')}}",
+            url: "{{route('phucap.add')}}",
             type: 'post',
             data: {
-                name: $('#cv').val(),
-                color: $('#color').val(),
+                ...data,
                 "_token": "{{ csrf_token() }}",
             }
         })
@@ -222,7 +317,7 @@ $(document).ready(function(){
                 toastr.success('Thêm thành công');
                 setTimeout(()=>{location.reload()}, 2000)
             }else{
-                toastr.error('Lỗi');
+                toastr.error(res.messenge);
             }
         })
     });

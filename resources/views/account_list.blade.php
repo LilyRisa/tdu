@@ -37,8 +37,8 @@
                                         <td><span class="badge badge-info"><a href="{{route('profile.index', ['id' => $user_item->username])}}" style="color:white">{{$user_item->username}}</a><span></td>
                                         <td>{{$user_item->email}}</td>
                                         <td>{{$user_item->fullname}}</td>
-                                        <td>{{$user_item->chucvu->name}}</td>
-                                        <td>{{$user_item->phongban->name}}</td>
+                                        <td>{{isset($user_item->chucvu->name) ? $user_item->chucvu->name : ''}}</td>
+                                        <td>{{isset($user_item->phongban->name) ? $user_item->phongban->name : ''}}</td>
                                         @if($user_item->isActive == 0)
                                         <td><span class="badge badge-success open-AddBookDialog" style="cursor: pointer;" data-toggle="modal" data-target="#exampleModal" data-avatar="{{asset('storage')}}/{{$user_item->avatar}}" data-id="{{$user_item->id}}" data-email="{{$user_item->email}}" data-fullname="{{$user_item->fullname}}">Active</span> <span class="badge badge-danger" style="cursor: pointer;">Reject</span></td>
                                         @else
@@ -130,6 +130,7 @@
             console.log(res);
             if(res.is){
                 toastr.success('Active thành công');
+                setTimeout(()=>{location.reload()},3000);
             }else{
                 toastr.error('Lỗi');
             }

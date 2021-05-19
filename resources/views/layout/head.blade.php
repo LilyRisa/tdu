@@ -29,3 +29,12 @@
 <link rel="stylesheet" href="{{asset('css/main.css')}}">
 <link rel="stylesheet" href="{{asset('css/color_skins.css')}}">
 <link rel="stylesheet" href="{{asset('css/toastr.min.css')}}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<style>
+    .tab-content > .tab-pane:not(.active) {
+        display: block;
+        height: 0;
+        overflow-y: hidden;
+    }
+</style>

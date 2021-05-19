@@ -13,4 +13,9 @@ class chucvu extends Model
     {
         return $this->hasMany(phongban::class, 'chucvu_id');
     }
+
+    public function phucap()
+    {
+        return $this->hasOne(phucap::class);
+    }
 }

@@ -51,14 +51,24 @@ class Usercontroller extends Controller
         return view('contact',['user'=>$user]);
     }
 
-    public function GetPhongBan(Request $request){
+    public function GetPhongBanWithChucVu(Request $request){
         $pb = phongban::where('chucvu_id',$request->input('chucvu_id'))->get();
+        return response()->json(['phongban' => $pb]);
+    }
+
+    public function GetChucVu(Request $request){
+        $cv = chucvu::where('id',$request->input('id'))->first();
+        return response()->json(['chucvu' => $cv]);
+    }
+
+    public function GetPhongBan(Request $request){
+        $pb = phongban::where('id',$request->input('id'))->first();
         return response()->json(['phongban' => $pb]);
     }
 
     public function ActiveUser(Request $request){
         $user = User::find($request->input('id'));
-        // $user->isActive = 1;
+        $user->isActive = 1;
         $user->	chucvu_id = (int)$request->input('chucvu');
         $user->	phongban_id = (int)$request->input('phongban');
         $user->	start_contract = date('Y-m-d H:i:s');

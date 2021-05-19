@@ -1,4 +1,4 @@
-@extends('layout', ['page' => 'chức vụ'])
+@extends('layout', ['page' => 'Lương cứng nhân viên'])
 @section('head')
 <style>
     .edittext, .edittext:focus{
@@ -15,10 +15,10 @@
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="header">
-                        <h2> Danh sách chức vụ </h2>
+                        <h2> Bảng kê khai lương </h2>
                         <div class="clearfix">
                             <div class="col-sm-3">
-                                <button class="btn btn-primary" id="add_cv" data-toggle="modal" data-target="#exampleModal">Thêm chức vụ</button>
+                                <button class="btn btn-primary" id="add_cv" data-toggle="modal" data-target="#exampleModal">Thêm bản ghi</button>
                             </div>
                         </div>
                         <!-- Modal -->
@@ -26,7 +26,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Thêm chức vụ</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Thêm bản ghi</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -35,12 +35,17 @@
                                     <form>
                                         <div class="form-group">
                                         <div class="form-line">
-                                            <label>Tên chức vụ</label>
-                                            <input type="text" class="form-control date" id="cv" value="">
+                                            <label>Chọn nhân viên: </label>
+                                            <select id="user_id" class="show-tick" style="margin-left: 10px">
+                                                @foreach ($user as $us)
+                                                    <option value="{{$us->id}}">{{$us->fullname}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-line">
-                                            <label>Màu</label>
-                                            <input type="color" class="form-control date" id="color" value="#FFFFFF">
+                                            <label>Mức lương</label>
+                                            <input type="number" min="10000" step="10000" class="form-control date" id="salaries" value="" style="display: inline; width: 70%">
+                                            <span>VND</span>
                                         </div>
                                         
                                         </div>
@@ -67,20 +72,30 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-exportable dataTable">
+                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
-                                        <th>Tên chức vụ</th>
-                                        <th>Màu</th>
+                                        <th>Id</th>
+                                        <th>User</th>
+                                        <th>Mức lương <span style="color: red">*</span></th>
+                                        <th>Created at</th>                                       
                                         <th width="20%">Operation</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($chucvu as $item)
+                                @foreach($salary as $item)
                                     <tr>
-                                        <td class="namecv" data-id="{{$item->id}}" data-st="0">{{$item->name}}</td>
-                                        <td><input type="color" class="form-control color_picker" value="{{$item->icon == null ? '#FFFFFF' : $item->icon}}" data-id="{{$item->id}}"></td>
-                                        <td><span class="badge badge-danger delete" style="cursor: pointer" data-id="{{$item->id}}">Xóa</span></td>
+                                        <td class="namecv" data-id="{{$item->id}}" data-st="0">{{$item->id}}</td>
+                                        <td data-id="{{$item->id}}" data-st="0"><span class="badge badge-warning bg-blue hidden-sm-down">
+                                            <a href="{{route('profile.index',['id' => $item->User->username])}}" style="color: white; text-decoration: none;" target="_blank">{{$item->User->username}}</a>
+                                        </span> {{$item->User->fullname}} </td>
+                                        <td class="currency">{{$item->salary}}</td>
+                                        <td>{{$item->created_at}}</td>
+                                        <td>
+                                            <span title="Thông báo qua sms phone" class="badge badge-success phone_send" style="cursor: pointer" data-id="{{$item->id}}" data-salary="{{$item->salary}}" data-userphone="{{$item->User->phone}}" data-time="{{$item->created_at}}"><i class="zmdi zmdi-smartphone-landscape"></i></span>
+                                            <span title="Thông báo qua Email" class="badge badge-success email_send" style="cursor: pointer" data-id="{{$item->id}}" data-email="{{$item->User->email}}" data-time="{{$item->created_at}}" data-user="{{$item->User->id}}" data-salary="{{$item->salary}}"><i class="zmdi zmdi-email"></i></span>
+                                            <span title="Việc xóa lương nhân viên sẽ ảnh hưởng đến phần tính lương cho nhân viên" class="badge badge-danger delete" style="cursor: pointer" data-id="{{$item->id}}">Xóa</span>
+                                        </td>
 
                                     </tr>
                                 @endforeach
@@ -106,6 +121,102 @@
 <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script>
 <script>
 $(document).ready(function(){
+    //currency format
+    $('.currency').each(function(i, obj) {
+        let val = parseInt($(obj).text());
+        val = val.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+        $(obj).text(val);
+    });
+    //send sms phone 
+    $('.phone_send').on('click', function(e){
+        e.stopPropagation();
+        var salary = $(this).data('salary');
+        var phone = $(this).data('userphone');
+        var time = $(this).data('time');
+        var that = this;
+        swal({
+            title: "Bạn có Muốn thông báo qua sms phone?",
+            text: "Thông báo tới "+phone+" mức lương được khởi tạo vào lúc: "+time ,
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((will) => {
+            if (will) {
+                $.ajax({
+                    url: "{{route('salaries.notiphone')}}",
+                    type: 'post',
+                    data: {
+                        phone: phone,
+                        salary: salary,
+                        time: time,
+                        "_token": "{{ csrf_token() }}",
+                    }
+                })
+                .done(res =>{
+                    if(res.is){
+                        swal("Thông bào thành công!", {
+                        icon: "success",
+                        });
+                        // setTimeout(()=>{location.reload()}, 2000)
+                    }else{
+                        swal("lôi!", {
+                        icon: "warning",
+                        });
+                    }
+                })
+            } else {
+                swal("Thông báo chưa được gửi!");
+            }
+        });
+    });
+    //send email
+    $('.email_send').on('click', function(e){
+        e.stopPropagation();
+        var id = $(this).data('id');
+        var email = $(this).data('email');
+        var time = $(this).data('time');
+        var user = $(this).data('user');
+        var salary = $(this).data('salary');
+        var that = this;
+        swal({
+            title: "Bạn có Muốn thông báo qua email?",
+            text: "Thông báo tới "+email+" mức lương được khởi tạo vào lúc: "+time ,
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((will) => {
+            console.log(id);
+            if (will) {
+                $.ajax({
+                    url: "{{route('salaries.noti')}}",
+                    type: 'post',
+                    data: {
+                        id: id,
+                        user_id: user,
+                        salary: salary,
+                        time: time,
+                        "_token": "{{ csrf_token() }}",
+                    }
+                })
+                .done(res =>{
+                    if(res.is){
+                        swal("Thông bào thành công!", {
+                        icon: "success",
+                        });
+                        // setTimeout(()=>{location.reload()}, 2000)
+                    }else{
+                        swal("lôi!", {
+                        icon: "warning",
+                        });
+                    }
+                })
+            } else {
+                swal("Thông báo chưa được gửi!");
+            }
+        });
+    });
     //delete
     $('.delete').on('click', function(e){
         e.stopPropagation();
@@ -113,8 +224,8 @@ $(document).ready(function(){
         var that = this;
         swal({
             title: "Bạn có chắc chắn?",
-            text: "Đồng ý sẽ xóa toàn bộ các dữ liệu liên quan",
-            icon: "warning",
+            text: "Việc xóa lương nhân viên sẽ ảnh hưởng đến phần tính lương cho nhân viên",
+            icon: "error",
             buttons: true,
             dangerMode: true,
         })
@@ -122,7 +233,7 @@ $(document).ready(function(){
             console.log(id);
             if (willDelete) {
                 $.ajax({
-                    url: "{{route('chucvu.delete')}}",
+                    url: "{{route('salaries.delete')}}",
                     type: 'post',
                     data: {
                         id: id,
@@ -209,11 +320,11 @@ $(document).ready(function(){
 
     $('#submit_cv').on('click', function(){
         $.ajax({
-            url: "{{route('chucvu.add')}}",
+            url: "{{route('salaries.add')}}",
             type: 'post',
             data: {
-                name: $('#cv').val(),
-                color: $('#color').val(),
+                user_id: $('#user_id').val(),
+                salary: $('#salaries').val(),
                 "_token": "{{ csrf_token() }}",
             }
         })
@@ -222,7 +333,7 @@ $(document).ready(function(){
                 toastr.success('Thêm thành công');
                 setTimeout(()=>{location.reload()}, 2000)
             }else{
-                toastr.error('Lỗi');
+                toastr.error(res.messenges);
             }
         })
     });

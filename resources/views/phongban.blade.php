@@ -63,7 +63,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <table class="table table-bordered table-striped table-hover js-exportable dataTable ">
                                 <thead>
                                     <tr>
                                         <th>Tên phòng ban</th>

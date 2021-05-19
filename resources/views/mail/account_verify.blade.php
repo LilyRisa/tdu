@@ -44,21 +44,7 @@
                       </td>
                       <!-- Social Button -->
                       <td width="330" style="width: 33%;" align="right">
-                        <div style="text-align: center; max-width: 150px; width: 100%;">
-                          <span>&nbsp;</span>
-                          <a href="#" target="_blank" border="0" style="border: none; outline: none; text-decoration: none; line-height: 60px; color: #ffffff; font-family: Verdana, Geneva, sans-serif;  -webkit-text-size-adjust:none">
-                            <img src="https://github.com/lime7/responsive-html-template/blob/master/index/f.png?raw=true" alt="facebook.com" border="0" width="11" height="23" style="border: none; outline: none; -ms-interpolation-mode: bicubic;">
-                          </a>
-                          <span>&nbsp;</span>
-                          <a href="#" target="_blank" border="0" style="border: none; outline: none; text-decoration: none; line-height: 60px; color: #ffffff; font-family: Verdana, Geneva, sans-serif; -webkit-text-size-adjust:none">
-                            <img src="https://github.com/lime7/responsive-html-template/blob/master/index/vk.png?raw=true" alt="vk.com" border="0" width="39" height="23" style="border: none; outline: none; -ms-interpolation-mode: bicubic;">
-                          </a>
-                          <span>&nbsp;</span>
-                          <a href="#" target="_blank" border="0" style="border: none; outline: none; text-decoration: none; line-height: 60px; color: #ffffff; font-family: Verdana, Geneva, sans-serif; -webkit-text-size-adjust:none;">
-                            <img src="https://github.com/lime7/responsive-html-template/blob/master/index/g+.png?raw=true" alt="google.com" border="0" width="23" height="23" style="border: none; outline: none; -ms-interpolation-mode: bicubic;">
-                          </a>
-                          <span>&nbsp;</span>
-                        </div>
+                        
                       </td>
                     </tr>
                     <tr><td colspan="3" height="100"></td></tr>
