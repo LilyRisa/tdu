@@ -39,6 +39,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('upload',[App\Http\Controllers\ProfileController::class, 'avatar'])->name('avatar');
     Route::get('contact',[App\Http\Controllers\Usercontroller::class, 'contact'])->name('contact');
 
+    //make quếtion 
+    Route::resource('student','\App\Http\Controllers\StudentController');
+    Route::resource('answer','\App\Http\Controllers\AnswerController');
+    Route::resource('result' , '\App\Http\Controllers\ResultController');
+
     Route::middleware(['CheckisAdmin'])->group(function(){
         Route::get('account',[App\Http\Controllers\Usercontroller::class, 'list'])->name('account.list');
         Route::post('account/getphongban',[App\Http\Controllers\Usercontroller::class, 'GetPhongBanWithChucVu'])->name('account.getpb');
@@ -91,7 +96,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('salary-cal-sms',[App\Http\Controllers\SalaryCalculatorController::class, 'sendSms'])->name('salarycal.sendSms');
         Route::post('salary-cal-email',[App\Http\Controllers\SalaryCalculatorController::class, 'sendEmail'])->name('salarycal.sendEmail');
 
-
+        // Route::get('/home', 'HomeController@index')->name('home');
+        Route::resource('examinfo','\App\Http\Controllers\ExaminfoController');
+        Route::resource('makequestion' , '\App\Http\Controllers\QuestionController');
 
         Route::get('getsession', function (Request $request) {
             dd($request->session()->all());

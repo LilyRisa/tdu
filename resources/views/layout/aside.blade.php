@@ -54,6 +54,15 @@
                     <li><a href="{{route('contact')}}">Danh sách nhân viên</a></li>
                 </ul>
             </li>
+            <li ><a href="javascript:void(0);" class="menu-toggle"><i class="material-icons">description</i><span>Exam</span></a>
+                <ul class="ml-menu">
+                    @if(Session::get('level') == 1)
+                        <li><a href="{{route('examinfo.index')}}">Câu hỏi kiểm tra</a></li>
+                    @endif
+                    <li><a href="{{route('student.index')}}">Tham gia kiểm tra</a></li>
+                    <li><a href="{{route('result.index')}}">Kết quả</a></li>
+                </ul>
+            </li>
 
 
 

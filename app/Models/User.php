@@ -65,4 +65,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(salary::class);
     }
+    public function examinfo()
+    {
+        return $this->hasOne(examinfo::class);
+    }
 }
