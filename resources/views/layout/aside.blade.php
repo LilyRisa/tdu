@@ -54,7 +54,7 @@
                     <li><a href="{{route('contact')}}">Danh sách nhân viên</a></li>
                 </ul>
             </li>
-            <li ><a href="javascript:void(0);" class="menu-toggle"><i class="material-icons">description</i><span>Exam</span></a>
+            <li ><a href="javascript:void(0);" class="menu-toggle"><i class="material-icons">question_answer</i><span>Exam</span></a>
                 <ul class="ml-menu">
                     @if(Session::get('level') == 1)
                         <li><a href="{{route('examinfo.index')}}">Câu hỏi kiểm tra</a></li>
