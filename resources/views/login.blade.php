@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="{{asset('css/toastr.min.css')}}">
         <script src="{{asset('js/toastr.min.js')}}"></script>
         <script src="{{asset('js/webcamjs/webcam.min.js')}}"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
         <style>
 
@@ -399,9 +400,16 @@ input[type=text]:placeholder {
             .done(res => {
               if(res.is){
                 toastr.success('Đăng nhập thành công');
+                swal({
+                    title: "Nhận diện thành công",
+                    text: "Họ và tên: "+res.messenge.fullname+"\nUsername: "+res.messenge.username+"\nEmail: "+res.messenge.email,
+                    icon: "success",
+                    buttons: false,
+                    dangerMode: true,
+                })
                 // setTimeout(()=>{location.reload();},3000);
               }else{
-                toastr.error('Lỗi hệ thống')
+                toastr.error(res.messenge)
               }
             })
             }

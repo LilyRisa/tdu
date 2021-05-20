@@ -45,15 +45,29 @@ class Usercontroller extends Controller
 
     public function loginFace(Request $request){
         $image = $request->input('avatar');
-        // $image = explode( ',', $image);
-        // $image = $image[1];
-        // $imageName = md5(Carbon::now()->timestamp) . '.png';
-        // $path = 'image/'.$imageName;
-        // Storage::disk('local')->put($path, base64_decode($image));
-        // $path = asset('storage').'/'.$path;
+        $image = explode( ',', $image);
+        $image = $image[1];
+        $imageName = md5(Carbon::now()->timestamp) . '.png';
+        $path = 'image/'.$imageName;
+        Storage::disk('local')->put($path, base64_decode($image));
+        $path = asset('storage').'/'.$path;
         // dd($path);
         $return = FaceRecogn::get_username_with_image($image);
-        return response()->json($return);
+        $return = json_decode($return, true);
+        if(!empty($return)){
+            $return = $return[0];
+            $username = $return['name'];
+            $user = User::where('username', $username)->first();
+            if($user != null){
+                Auth::loginUsingId($user->id);
+                session(['user_username' => $user->username, 'level' => $user->isAdmin, 'avatar' => $user->avatar, 'fullname' => $user->fullname, 'email' => $user->email]);
+                return response()->json(['is' => true, 'messenge' => $user]);
+            }
+
+            return response()->json(['is' => false, 'messenge' => 'Không nhận diện được nhân viên nào']);
+        }
+
+        return response()->json(['is' => false, 'messenge' => 'Không nhận diện được nhân viên nào']);
     }
 
     public function list(){
