@@ -10,6 +10,9 @@ use App\Models\phongban;
 use Illuminate\Session\Middleware\StartSession;
 use Auth;
 use App\Jobs\SendEmail;
+use App\Jobs\FaceRecogn;
+use Carbon\Carbon;
+use Storage;
 
 class Usercontroller extends Controller
 {
@@ -38,6 +41,19 @@ class Usercontroller extends Controller
             
         }
         return response()->json(['is' => false]);
+    }
+
+    public function loginFace(Request $request){
+        $image = $request->input('avatar');
+        // $image = explode( ',', $image);
+        // $image = $image[1];
+        // $imageName = md5(Carbon::now()->timestamp) . '.png';
+        // $path = 'image/'.$imageName;
+        // Storage::disk('local')->put($path, base64_decode($image));
+        // $path = asset('storage').'/'.$path;
+        // dd($path);
+        $return = FaceRecogn::get_username_with_image($image);
+        return response()->json($return);
     }
 
     public function list(){

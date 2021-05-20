@@ -25,6 +25,7 @@ Route::get('login', function () {
 Route::get('generation',[App\Http\Controllers\GenerationBarcode::class, 'Generation'])->name('generation');
 Route::post('register',[App\Http\Controllers\Usercontroller::class, 'register'])->name('register');
 Route::post('loginpost',[App\Http\Controllers\Usercontroller::class, 'login'])->name('loginpost');
+Route::post('loginpost-face',[App\Http\Controllers\Usercontroller::class, 'loginFace'])->name('loginpostface');
 
 
 
@@ -100,8 +101,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('examinfo','\App\Http\Controllers\ExaminfoController');
         Route::resource('makequestion' , '\App\Http\Controllers\QuestionController');
 
+
+
+
+        
+
         Route::get('getsession', function (Request $request) {
             dd($request->session()->all());
         });
     });
 });
+Route::get('testcontroller' , [App\Http\Controllers\TestController::class, 'demo']);
+Route::get('face/{username}' , [App\Http\Controllers\TestController::class, 'face']);

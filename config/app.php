@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'FaceRecogn_token' => env('LUXAND_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

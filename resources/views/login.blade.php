@@ -15,7 +15,7 @@
         <script src="{{asset('js/bootstrap-datepicker.js')}}"></script>
         <link rel="stylesheet" href="{{asset('css/toastr.min.css')}}">
         <script src="{{asset('js/toastr.min.js')}}"></script>
-
+        <script src="{{asset('js/webcamjs/webcam.min.js')}}"></script>
 
         <style>
 
@@ -75,6 +75,19 @@ h2 {
   text-align: center;
 }
 #formReg{
+    -webkit-border-radius: 10px 10px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
+  background: #fff;
+  padding: 30px;
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  padding: 0px;
+  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  text-align: center;
+}
+#facelogin{
     -webkit-border-radius: 10px 10px 10px 10px;
   border-radius: 10px 10px 10px 10px;
   background: #fff;
@@ -315,7 +328,9 @@ input[type=text]:placeholder {
 
             <!-- Remind Passowrd -->
             <div id="formFooter">
-            <a class="underlineHover" id="reg" href="#">Đăng kí tài khoản</a>
+            <a class="underlineHover" id="reg" href="#">Đăng kí tài khoản</a><br/>
+            <a class="underlineHover" id="facelog" href="#">Đăng nhập bằng khuôn mặt</a>
+
             </div>
 
         </div>
@@ -345,9 +360,68 @@ input[type=text]:placeholder {
             </div>
 
         </div>
+        <div id="facelogin" style="display:none">
+          <div class="fadeIn first">
+            <img src="https://quantri.thanhdo.edu.vn/upload/thanhdo/images/logo-daihocthanhdo(1).jpg" id="icon" alt="User Icon" />
+            </div>
+              <div class="row">
+                <div class="col col-md-12" id="my_camera" style="overflow: ">
+                </div>
+                <hr>
+                <div class="col col-md-6" id="results" style="margin: 10px 0px">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-md-3"></div>
+                <div class="col col-md-3"><button class="btn btn-warning" id="takephoto">Chụp ảnh</button></div>
+                <div class="col col-md-3"><button class="btn btn-primary" id="login_ok">Đăng nhập</button></div>
+                <div class="col col-md-3"></div>
+                
+              </div>
+            
+        </div>
     </div>
     <script>
         $(document).ready(function(){
+
+          $('#login_ok').on('click', function(){
+            if (typeof $('#avatar_lo').attr('src') === 'undefined'){
+              toastr.error('Hãy chụp ảnh')
+            }else{
+              $.ajax({
+                url: '{{route("loginpostface")}}',
+                type: 'post',
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    avatar: $('#avatar_lo').attr('src'),
+                }
+            })
+            .done(res => {
+              if(res.is){
+                toastr.success('Đăng nhập thành công');
+                // setTimeout(()=>{location.reload();},3000);
+              }else{
+                toastr.error('Lỗi hệ thống')
+              }
+            })
+            }
+              
+          });
+
+          $('#takephoto').on('click', function(e){
+            e.preventDefault();
+            Webcam.snap( function(data_uri) {
+              $('#results').html(`<img class="img-responsive" id="avatar_lo" src="${data_uri}" />`)
+            })
+          });
+          Webcam.set({
+            width: 320,
+            height: 240,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+          });
+          Webcam.attach( '#my_camera' );
+
             $('#reg_contract').datepicker({
                 format:'mm/dd/yyyy',
             });
@@ -355,11 +429,20 @@ input[type=text]:placeholder {
                 e.preventDefault();
                 $('#formContent').fadeIn(2000).hide();
                 $('#formReg').fadeOut(2000).show();
+                $('#facelogin').fadeIn(2000).hide();
+
             });
             $('#log').on('click', function(e){
                 e.preventDefault();
                 $('#formReg').fadeOut(2000).hide();
+                $('#facelogin').fadeIn(2000).hide();
                 $('#formContent').fadeIn(2000).show();
+            });
+            $('#facelog').on('click', function(e){
+                e.preventDefault();
+                $('#formReg').fadeOut(2000).hide();
+                $('#formContent').fadeIn(2000).hide();
+                $('#facelogin').fadeIn(2000).show();
             });
 
             $('#get_username').on('click', function(e){
@@ -447,8 +530,10 @@ input[type=text]:placeholder {
                   toastr.error('error');
                 })
             }
+    
             
         });
+  
     </script>
     </body>
 </html>

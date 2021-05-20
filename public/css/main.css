@@ -19025,6 +19025,8 @@ section.content {
 .profile-page .profile-header .profile_info .profile-image img {
     border-radius: 50%;
     width: 180px;
+    height: 176px;
+    object-fit: cover;
     border: 3px solid #fff;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16),0 3px 6px rgba(0,0,0,0.23)
 }
