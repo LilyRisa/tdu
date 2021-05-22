@@ -451,8 +451,29 @@ $(document).ready(function(){
         let chucvu = parseInt($('option:selected', this).data('chucvu'));
         let phongban = parseInt($('option:selected', this).data('phongban'));
         let salary = parseInt($('option:selected', this).data('salary'));
-        getChucVu(chucvu);
-        getPhongBan(phongban);
+        $.ajax({
+           url: '{{route("account.getcv")}}',
+           type: 'post',
+           data:{
+                "_token": "{{ csrf_token() }}",
+                id: chucvu
+           }
+       })
+       .done(res =>{
+           console.log(res);
+           res = res.chucvu;
+           if(res != null){
+                $('#chucvu').html(`<option id="${res.id}">${res.name}</option>`);
+                $('#chucvu').selectpicker("refresh");
+                getPhongBan(phongban);
+           }else{
+               $('#tinhluong').attr('disabled', 'true');
+               swal("Nhân viên chưa được active!");
+           }
+           
+       })
+        
+        
         getSalary(chucvu, phongban, salary);
         salary = salary.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
         $('#lab_user').text(`Nhân viên (Lương cứng: ${salary})`);
