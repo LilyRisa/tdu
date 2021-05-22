@@ -404,10 +404,12 @@ input[type=text]:placeholder {
                     title: "Nhận diện thành công",
                     text: "Họ và tên: "+res.messenge.fullname+"\nUsername: "+res.messenge.username+"\nEmail: "+res.messenge.email,
                     icon: "success",
-                    buttons: false,
+                    buttons: true,
                     dangerMode: true,
+                }).then((willDelete) => {
+                  setTimeout(()=>{location.reload();},3000);
                 })
-                // setTimeout(()=>{location.reload();},3000);
+                
               }else{
                 toastr.error(res.messenge)
               }

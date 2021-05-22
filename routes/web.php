@@ -45,6 +45,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('answer','\App\Http\Controllers\AnswerController');
     Route::resource('result' , '\App\Http\Controllers\ResultController');
 
+    Route::get('face-recogn-index',[App\Http\Controllers\FaceRecognModelController::class, 'index'])->name('face.index');
+    Route::post('face-recogn-post',[App\Http\Controllers\FaceRecognModelController::class, 'post'])->name('face.post');
+    Route::post('face-recogn-detect',[App\Http\Controllers\FaceRecognModelController::class, 'detect'])->name('face.detect');
+    Route::get('face-recogn-create-person',[App\Http\Controllers\FaceRecognModelController::class, 'create_person'])->name('face.createper');
+    Route::post('face-recogn-create-person-post',[App\Http\Controllers\FaceRecognModelController::class, 'create_person_post'])->name('face.postper');
+
+
     Route::middleware(['CheckisAdmin'])->group(function(){
         Route::get('account',[App\Http\Controllers\Usercontroller::class, 'list'])->name('account.list');
         Route::post('account/getphongban',[App\Http\Controllers\Usercontroller::class, 'GetPhongBanWithChucVu'])->name('account.getpb');

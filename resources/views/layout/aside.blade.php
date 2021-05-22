@@ -63,6 +63,11 @@
                     <li><a href="{{route('result.index')}}">Kết quả</a></li>
                 </ul>
             </li>
+            <li ><a href="javascript:void(0);" class="menu-toggle"><i class="material-icons">supervised_user_circle</i><span>Nhận diện khuôn mặt</span></a>
+                <ul class="ml-menu">
+                    <li><a href="{{route('face.index')}}">Nhận diện khuôn mặt</a></li>
+                </ul>
+            </li>
 
 
 

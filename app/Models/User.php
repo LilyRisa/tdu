@@ -69,4 +69,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(examinfo::class);
     }
+    public function FaceRecognModel()
+    {
+        return $this->hasOne(FaceRecognModel::class);
+    }
 }

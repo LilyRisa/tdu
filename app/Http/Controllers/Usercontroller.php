@@ -51,8 +51,8 @@ class Usercontroller extends Controller
         $path = 'image/'.$imageName;
         Storage::disk('local')->put($path, base64_decode($image));
         $path = asset('storage').'/'.$path;
-        // dd($path);
         $return = FaceRecogn::get_username_with_image($image);
+        Storage::disk('local')->delete($path);
         $return = json_decode($return, true);
         if(!empty($return)){
             $return = $return[0];
