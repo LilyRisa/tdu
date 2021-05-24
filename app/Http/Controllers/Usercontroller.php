@@ -12,6 +12,7 @@ use Auth;
 use App\Jobs\SendEmail;
 use App\Jobs\FaceRecogn;
 use Carbon\Carbon;
+use App\Models\LogSmsEmail;
 use Storage;
 
 class Usercontroller extends Controller
@@ -109,6 +110,9 @@ class Usercontroller extends Controller
             'body' => 'Tài khoản của bạn được kích hoạt bơi quản trị viên truy cập vào link sau để đăng nhặp lại <a href="'.route('index').'">'.route('index').'</a>',
             'image' => 'https://raw.githubusercontent.com/lime7/responsive-html-template/master/index/intro__bg.png'
             ]);
+        $logg = new LogSmsEmail();
+        $logg->type = false;
+        $logg->save();
         return response()->json(['is' => true, 'user'=>$user_get]);
     }
 }

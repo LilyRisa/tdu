@@ -6,7 +6,7 @@
     <div class="profile-header" style="background-image: url({{asset('images/profilebg.jpg')}})">
         <div class="profile_info row">
             <div class="col-lg-3 col-md-4 col-12">
-                <div class="profile-image float-md-right" id="upload" style="cursor: pointer;"> <img id="preimg" src="{{asset('storage')}}/{{$user->avatar}}" alt=""> </div>
+                <div class="profile-image float-md-right" id="upload" style="cursor: pointer;"> <img id="preimg" src="{{$user->avatar != null ? asset('storage').'/'.$user->avatar : asset('images/anonymous.png')}}" alt=""> </div>
                 @if($user->username == Session::get('user_username'))
                     <input type="file" id="avatar" style="display:none">
                 @endif

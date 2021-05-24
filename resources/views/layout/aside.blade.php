@@ -50,7 +50,8 @@
                         <li><a href="{{route('account.list')}}">Báo cáo lương toàn thể nhân viên</a></li>
                         <li><a href="{{route('salaryreport.index')}}">Tính lương cho nhân viên</a></li>
                     @endif
-                    <li><a href="index2.html">báo cáo lương</a></li>
+                    <li><a href="calendar.list">báo cáo lương</a></li>
+                    <li><a href="{{route('calendar.list')}}">Danh sách note</a></li>
                     <li><a href="{{route('contact')}}">Danh sách nhân viên</a></li>
                 </ul>
             </li>

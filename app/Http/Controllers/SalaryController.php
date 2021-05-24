@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\salary;
 use App\Models\User;
+use App\Models\LogSmsEmail;
 use App\Jobs\SendEmail;
 use App\Jobs\PhoneSms;
 
@@ -57,6 +58,9 @@ class SalaryController extends Controller
             'body' => 'Mức lương hiện tại của bạn là: <h3>'.number_format((int)$request->input('salary')).' VND</h3> truy cập vào link sau để xem lại <a href="'.route('index').'">'.route('index').'</a>',
             'image' => 'https://scopeblog.stanford.edu/wp-content/uploads/2019/04/aidan-bartos-313782-unsplash-1152x578.jpg'
             ]);
+        $logg = new LogSmsEmail();
+        $logg->type = false;
+        $logg->save();
         return response()->json(['is' => true, 'user'=>$user_get]);
     }
 
@@ -65,6 +69,9 @@ class SalaryController extends Controller
         $phone = '+84'.$request->input('phone');
         $phone = new PhoneSms('Muc luong hien tai cua ban la: '.number_format((int)$request->input('salary')).'VND vao thoi gian '.$request->input('time').'. Truy cap tai day de xem day du hon '.route('index'), $phone);
         $phone->sendMessage();
+        $logg = new LogSmsEmail();
+        $logg->type = true;
+        $logg->save();
         return response()->json(['is' => true]);
 
     }

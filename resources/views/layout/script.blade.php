@@ -18,3 +18,4 @@
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="{{asset('js/webcamjs/webcam.min.js')}}"></script>
+<script src="{{asset('plugins/fullcalendar/fullcalendar.min.js')}}"></script>

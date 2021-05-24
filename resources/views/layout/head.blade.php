@@ -25,6 +25,9 @@
 <!-- noUISlider Css -->
 <link rel="stylesheet" href="{{asset('plugins/nouislider/nouislider.min.css')}}" />
 
+<!-- calendar Css -->
+<link rel="stylesheet" href="{{asset('plugins/fullcalendar/fullcalendar.min.css')}}">
+
 <!-- Custom Css -->
 <link rel="stylesheet" href="{{asset('css/main.css')}}">
 <link rel="stylesheet" href="{{asset('css/color_skins.css')}}">

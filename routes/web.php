@@ -26,6 +26,8 @@ Route::get('generation',[App\Http\Controllers\GenerationBarcode::class, 'Generat
 Route::post('register',[App\Http\Controllers\Usercontroller::class, 'register'])->name('register');
 Route::post('loginpost',[App\Http\Controllers\Usercontroller::class, 'login'])->name('loginpost');
 Route::post('loginpost-face',[App\Http\Controllers\Usercontroller::class, 'loginFace'])->name('loginpostface');
+Route::post('covid-api',[App\Http\Controllers\HomeController::class, 'covid_api'])->name('covid_api');
+
 
 
 
@@ -108,7 +110,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('examinfo','\App\Http\Controllers\ExaminfoController');
         Route::resource('makequestion' , '\App\Http\Controllers\QuestionController');
 
-
+        // note calendar  
+        Route::post('calendar-save',[App\Http\Controllers\CalendarController::class, 'save'])->name('calendar.save');
+        Route::post('calendar-dalete',[App\Http\Controllers\CalendarController::class, 'delete'])->name('calendar.delete');
+        Route::post('calendar-update',[App\Http\Controllers\CalendarController::class, 'update'])->name('calendar.update');
+        Route::get('calendar-list',[App\Http\Controllers\CalendarController::class, 'list'])->name('calendar.list');
+        Route::get('calendar-edit',[App\Http\Controllers\CalendarController::class, 'edit'])->name('calendar.edit');
 
 
         

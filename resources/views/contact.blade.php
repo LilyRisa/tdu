@@ -80,7 +80,7 @@
                                     
                                 </div>
                                 <div class="avatar">
-                                    <img src="{{asset('storage')}}/{{$user_item->avatar}}" class="rounded-circle" alt="">
+                                    <img src="{{$user_item->avatar != null ? asset('storage').'/'.$user_item->avatar : asset('images/anonymous.png')}}" class="rounded-circle" alt="">
                                 </div>
                                 <div class="u_name">
                                     <h5 class="c_name">{{$user_item->fullname}}<span class="badge badge-warning bg-blue hidden-sm-down">{{$user_item->username}}</span></h5>

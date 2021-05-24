@@ -7,6 +7,7 @@ use App\Models\SalaryCalculator;
 use App\Jobs\SendEmail;
 use App\Jobs\PhoneSms;
 use App\Models\User;
+use App\Models\LogSmsEmail;
 
 
 class SalaryCalculatorController extends Controller
@@ -44,6 +45,9 @@ class SalaryCalculatorController extends Controller
         $phone = '+84'.$request->input('phone');
         $phone = new PhoneSms('Muc luong net: '.$net.' - Gross: '.$gross.' - thuc nhan: '.$tn.'. Duoc khoi tao luc '.$created_at.'. Truy cap tai day de xem day du hon '.route('index'), $phone);
         $phone->sendMessage();
+        $logg = new LogSmsEmail();
+        $logg->type = true;
+        $logg->save();
         return response()->json(['is' => true]);
     }
 
@@ -59,6 +63,9 @@ class SalaryCalculatorController extends Controller
             'body' => 'Mức lương Gross: <h3>'.$gross.'</h3></br/>Mức lương Net: <h3>'.$net.'</h3></br/>Số ngày nghỉ: <h3>'.$leave.' ngày</h3></br/>Lương thực nhận: <h3>'.$tn.'</h3></br/>  <p><i>Khởi tạo lúc: '.$created_at.'</i></p> </br/> truy cập vào link sau để xem lại <a href="'.route('index').'">'.route('index').'</a>',
             'image' => 'https://scopeblog.stanford.edu/wp-content/uploads/2019/04/aidan-bartos-313782-unsplash-1152x578.jpg'
             ]);
+        $logg = new LogSmsEmail();
+        $logg->type = false;
+        $logg->save();
         return response()->json(['is' => true, 'user'=>$user_get]);
     }
 }
