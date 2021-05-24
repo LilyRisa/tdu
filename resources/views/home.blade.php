@@ -218,14 +218,15 @@
                     </ul>
                 </div>
                 <div class="body">
-                    <div class="table-responsive social_media_table">
+                    <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover js-exportable dataTable ">
                             <thead>
                                 <tr>
-                                    <th colspan="2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">User</font></font></th>
-                                    <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ip v4</font></font></th>
-                                    <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">UserAgent</font></font></th>                                                                                
-                                    <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Truy cập cuối</font></font></th>
+                                    <th>User avatar</th>
+                                    <th>User</th>
+                                    <th>Ip v4</th>
+                                    <th>UserAgent</th>                                                                                
+                                    <th>Truy cập cuối</th>
 
                                 </tr>
                             </thead>
@@ -238,10 +239,10 @@
                                     <td>
                                         <a href="{{$log->user != null ? route('profile.index', ['id' =>$log->user->username]) : '#'}}">{{$log->user != null ? $log->user->fullname : 'Anonymous'}}</a>
                                     </td>
-                                    <td><span class="list-name"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$log->ip_address}}</font></font></span>
+                                    <td>{{$log->ip_address}}
                                     </td>
-                                    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$log->user_agent}}</font></font></td>
-                                    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$log->last_activity }}</font></font></td>
+                                    <td>{{$log->user_agent}}</td>
+                                    <td>{{$log->last_activity }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
