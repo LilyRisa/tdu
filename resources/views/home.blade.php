@@ -236,7 +236,7 @@
                                         <img class="rounded-circle" src="{{$log->user != null ? asset('storage').'/'.$log->user->avatar : asset('images/anonymous.png')}}"  alt="user" width="40">
                                     </td>
                                     <td>
-                                        <a href="{{route('profile.index', ['id' =>$log->user->username])}}">{{$log->user != null ? $log->user->fullname : 'Anonymous'}}</a>
+                                        <a href="{{$log->user != null ? route('profile.index', ['id' =>$log->user->username]) : '#'}}">{{$log->user != null ? $log->user->fullname : 'Anonymous'}}</a>
                                     </td>
                                     <td><span class="list-name"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$log->ip_address}}</font></font></span>
                                     </td>
