@@ -219,7 +219,7 @@
                 </div>
                 <div class="body">
                     <div class="table-responsive social_media_table">
-                        <table class="table table-hover">
+                        <table class="table table-bordered table-striped table-hover js-exportable dataTable ">
                             <thead>
                                 <tr>
                                     <th colspan="2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">User</font></font></th>
