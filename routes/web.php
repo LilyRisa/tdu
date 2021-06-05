@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
+
 // use Auth;
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +26,61 @@ Route::get('login', function () {
     }
     return view('login');
 })->name('login');
+//reset password
+Route::get('reset-password',function(){
+    if(Auth::check()){
+        return redirect()->route('index');
+    }
+    return view('repass');
+})->name('repass');
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+    // dd($status);
+    return $status === Password::RESET_LINK_SENT
+                ? view('noti',['content' => '<center><h2>Một email đặt lại mật khẩu đã được gửi đến hộp thư của bạn kiểm tra hộp thư và đặt lại mật khẩu</h2></center><script>setTimeout(()=>{location.href="'.route('login').'";},3000)</script>'])
+                : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', function ($token) {
+    return view('reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|confirmed',
+    ]);
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+
+            $user->save();
+
+            event(new PasswordReset($user));
+        }
+    );
+    // dd($request->only('email', 'password', 'password_confirmation', 'token'));
+    // dd(Password::PASSWORD_RESET);
+    return $status === Password::PASSWORD_RESET
+                ? view('noti',['content' => '<center><h2>Cập nhật mật khẩu thành công</h2></center><script>setTimeout(()=>{location.href="'.route('login').'";},3000)</script>'])
+                : view('noti',['content' => '<center><h2 style="color:red">Hệ thống bị lỗi</h2></center><script>setTimeout(()=>{location.href="'.route('login').'";},3000)</script>']);
+})->middleware('guest')->name('password.update');
 
 Route::get('generation',[App\Http\Controllers\GenerationBarcode::class, 'Generation'])->name('generation');
 Route::post('register',[App\Http\Controllers\Usercontroller::class, 'register'])->name('register');
 Route::post('loginpost',[App\Http\Controllers\Usercontroller::class, 'login'])->name('loginpost');
 Route::post('loginpost-face',[App\Http\Controllers\Usercontroller::class, 'loginFace'])->name('loginpostface');
 Route::post('covid-api',[App\Http\Controllers\HomeController::class, 'covid_api'])->name('covid_api');
+
+
 
 
 

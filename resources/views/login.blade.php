@@ -329,8 +329,9 @@ input[type=text]:placeholder {
 
             <!-- Remind Passowrd -->
             <div id="formFooter">
-            <a class="underlineHover" id="reg" href="#">Đăng kí tài khoản</a><br/>
-            <a class="underlineHover" id="facelog" href="#">Đăng nhập bằng khuôn mặt</a>
+            <a class="underlineHover reg" href="#">Đăng kí tài khoản</a><br/>
+            <a class="underlineHover facelog" href="#">Đăng nhập bằng khuôn mặt</a><br/>
+            <a class="underlineHover" href="{{route('repass')}}">Đặt lại mật khẩu</a>
 
             </div>
 
@@ -357,7 +358,7 @@ input[type=text]:placeholder {
 
             <!-- Remind Passowrd -->
             <div id="formFooter">
-            <a class="underlineHover" id="log" href="#">login</a>
+            <a class="underlineHover log" href="#">login</a>
             </div>
 
         </div>
@@ -379,6 +380,11 @@ input[type=text]:placeholder {
                 <div class="col col-md-3"></div>
                 
               </div>
+              <div id="formFooter">
+                <a class="underlineHover reg" href="#">Đăng kí tài khoản</a><br/>
+                <a class="underlineHover log" href="#">login</a>
+    
+                </div>
             
         </div>
     </div>
@@ -435,24 +441,25 @@ input[type=text]:placeholder {
             $('#reg_contract').datepicker({
                 format:'mm/dd/yyyy',
             });
-            $('#reg').on('click', function(e){
+            $('.reg').on('click', function(e){
                 e.preventDefault();
-                $('#formContent').fadeIn(2000).hide();
+                $('#formContent').hide();
+                $('#facelogin').hide();
                 $('#formReg').fadeOut(2000).show();
-                $('#facelogin').fadeIn(2000).hide();
+                
 
             });
-            $('#log').on('click', function(e){
+            $('.log').on('click', function(e){
                 e.preventDefault();
-                $('#formReg').fadeOut(2000).hide();
-                $('#facelogin').fadeIn(2000).hide();
-                $('#formContent').fadeIn(2000).show();
+                $('#formReg').hide();
+                $('#facelogin').hide();
+                $('#formContent').fadeOut(2000).show();
             });
-            $('#facelog').on('click', function(e){
+            $('.facelog').on('click', function(e){
                 e.preventDefault();
-                $('#formReg').fadeOut(2000).hide();
-                $('#formContent').fadeIn(2000).hide();
-                $('#facelogin').fadeIn(2000).show();
+                $('#formReg').hide();
+                $('#formContent').hide();
+                $('#facelogin').fadeOut(2000).show();
             });
 
             $('#get_username').on('click', function(e){
